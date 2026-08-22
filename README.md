@@ -21,7 +21,7 @@ A web app that connects to a database and lets you run SQL queries from the brow
 
 ## How to Run
 ```bash
-pip install -r requirement.txt
+pip install -r requirements.txt
 python app.py
 ```
 
