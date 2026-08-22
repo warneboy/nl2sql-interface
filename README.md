@@ -31,4 +31,4 @@ Then open: http://localhost:5001
 - Runs on port 5001 (auto-finds a free port if taken)
 - Sessions last 24 hours
 - Passwords are hashed before storing
-- Model weights (`nl2sql_model/`) are excluded from this repo due to GitHub's 100 MB file limit
+- Model weights (`nl2sql_model/`) are stored via Git LFS — install [git-lfs](https://git-lfs.com) before cloning

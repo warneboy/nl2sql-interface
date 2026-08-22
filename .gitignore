@@ -33,7 +33,3 @@ instance/
 # Jupyter Notebook
 .ipynb_checkpoints/
 *.ipynb_checkpoints
-
-# Large model weights (> GitHub 100MB limit)
-nl2sql_model.zip
-nl2sql_model/
