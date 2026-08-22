@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL Database Interface</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Profile -->
+        <div class="header">
+            <h1><i class="fas fa-database"></i> NL2SQL Interface</h1>
+            <div class="header-right">
+                <div class="connection-status">
+                    <span id="status-indicator" class="status-disconnected"></span>
+                    <span id="status-text">Disconnected</span>
+                    <span id="current-database" style="margin-left: 10px; color: var(--text-muted);"></span>
+                </div>
+                <div class="profile-dropdown">
+                    <button id="profile-btn" class="profile-btn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="user-email-display">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="profile-menu" class="profile-menu">
+                        <div class="profile-header">
+                            <i class="fas fa-user-circle" style="font-size: 40px; color: var(--primary-color);"></i>
+                            <div>
+                                <div id="profile-name" style="font-weight: 600;"></div>
+                                <div id="profile-email" style="font-size: 12px; color: var(--text-muted);"></div>
+                            </div>
+                        </div>
+                        <div class="profile-divider"></div>
+                        <button class="profile-menu-item" id="change-password-btn" onclick="showChangePassword()">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                        <button class="profile-menu-item" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Connection Form -->
+                <div class="connection-form">
+                    <h2><i class="fas fa-plug"></i> Database Connection</h2>
+                    
+                    <div class="form-group">
+                        <label for="db-type"><i class="fas fa-server"></i> Database Type</label>
+                        <select id="db-type" class="form-control">
+                            <option value="mysql">MySQL</option>
+                            <option value="postgresql">PostgreSQL</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="host"><i class="fas fa-network-wired"></i> Host</label>
+                        <input type="text" id="host" class="form-control" placeholder="localhost" value="localhost">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="port"><i class="fas fa-door-open"></i> Port</label>
+                            <input type="text" id="port" class="form-control" placeholder="3306" value="3306">
+                        </div>
+                        <div class="form-group half">
+                            <label for="initial-database"><i class="fas fa-database"></i> Initial DB</label>
+                            <input type="text" id="initial-database" class="form-control" placeholder="(optional)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="username" class="form-control" placeholder="root">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="password">
+                    </div>
+
+                    <div class="button-group">
+                        <button id="connect-btn" class="btn btn-primary">
+                            <i class="fas fa-link"></i> Connect
+                        </button>
+                        <button id="disconnect-btn" class="btn btn-danger" style="display:none;">
+                            <i class="fas fa-unlink"></i> Disconnect
+                        </button>
+                    </div>
+
+                    <div id="connection-message" class="message"></div>
+                </div>
+
+                <!-- Database Explorer -->
+                <div class="database-explorer" style="display:none;">
+                    <h3><i class="fas fa-folder-tree"></i> Database Explorer</h3>
+                    <div id="database-list"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Chat/Query Interface -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-header-top">
+                            <h3><i class="fas fa-comment-dots"></i> SQL Query Interface</h3>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">
+                            <i class="fas fa-keyboard"></i> Press Enter to execute
+                            <span style="margin-left: 15px;">
+                                <i class="fas fa-database"></i> Current: <span id="chat-current-db">None</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="message system">
+                            <div class="message-content">
+                                <i class="fas fa-info-circle"></i> Welcome to NL2SQL Interface! Connect to a database to start querying.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="input-wrapper">
+                            <textarea id="query-input" class="query-input" placeholder="Enter your query here..." rows="3" disabled></textarea>
+                            <div class="button-group-vertical">
+                                <button id="execute-btn" class="btn btn-success" disabled>
+                                    <i class="fas fa-play"></i> Execute
+                                </button>
+                                <button id="clear-btn" class="btn btn-secondary" disabled>
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-hint">
+                            <small><i class="fas fa-info-circle"></i> Press Enter to execute, Shift+Enter for new line</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Viewer -->
+                <div class="table-viewer" id="table-viewer" style="display:none;">
+                    <div class="table-viewer-header">
+                        <h3><i class="fas fa-table"></i> Tables in <span id="table-viewer-db">Current Database</span></h3>
+                        <button class="btn btn-secondary" onclick="refreshTables()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="table-viewer-content" class="table-viewer-content">
+                        <div class="loading-tables">
+                            <i class="fas fa-spinner fa-spin"></i> Loading tables...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="password-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Change Password</h3>
+                <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="current-password" class="form-control" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-password" class="form-control" placeholder="Enter new password (min 8 chars)">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password">
+                </div>
+                <div id="password-message" class="message"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePasswordModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitPasswordChange()">Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <script src="https://accounts.google.com/gsi/client" async></script>
+</head>
+<body>
+
+<div class="auth-container">
+    <!-- LOGIN CARD -->
+    <div class="auth-card">
+        <div class="logo">
+            <i class="fas fa-database"></i>
+        </div>
+        <h1>NL2SQL</h1>
+        <p class="subtitle">Sign in to access your SQL interface</p>
+
+        <form id="login-form">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="login-email" placeholder="Email address" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="login-password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="auth-btn">
+                <i class="fas fa-right-to-bracket"></i> Login
+            </button>
+        </form>
+
+        <div class="divider"><span>OR</span></div>
+
+        <!-- Google Login Button -->
+        <div id="google-login"></div>
+
+        <p class="switch-text">
+            Don't have an account?
+            <button id="show-signup">Sign Up</button>
+        </p>
+        <div id="auth-message"></div>
+    </div>
+
+    <!-- SIGNUP CARD -->
+    <div class="auth-card signup-card" style="display:none;">
+        <div class="logo">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <h1>Create Account</h1>
+        <p class="subtitle">Create your NL2SQL account</p>
+
+        <form id="signup-form">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="signup-name" placeholder="Full name" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="signup-email" placeholder="Email address" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="signup-password" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="signup-confirm" placeholder="Confirm password" required>
+            </div>
+            <button type="submit" class="auth-btn">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+
+        <div class="divider"><span>OR</span></div>
+
+        <!-- Google Signup Button -->
+        <div id="google-signup"></div>
+
+        <p class="switch-text">
+            Already have an account?
+            <button id="show-login">Login</button>
+        </p>
+        <div id="signup-message"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+</html>
