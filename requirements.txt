@@ -12,3 +12,4 @@ sentence-transformers==5.7.0
 torch
 safetensors
 numpy
+gunicorn==21.2.0

@@ -1366,14 +1366,7 @@ def find_free_port():
         return s.getsockname()[1]
 
 if __name__ == '__main__':
-    port = 5001
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(('0.0.0.0', port))
-            s.close()
-    except OSError:
-        port = find_free_port()
-        print(f"⚠️ Port 5001 is in use. Using port {port} instead.")
+    port = int(os.environ.get('PORT', 5001))
 
     print(f"\n{'='*50}")
     print(f"🚀 Starting NL2SQL Interface with Authentication...")
